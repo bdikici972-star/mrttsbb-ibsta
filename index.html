@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym Bantem - Yakında</title>
+    <title>symbntm - Kişisel Profil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -11,283 +12,423 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --accent: #FF6B6B;
+            --dark: #1A1A1A;
+            --light: #F5F5F5;
+            --gray: #666;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .star {
-            position: absolute;
-            background: #fff;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
         }
 
         .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Profile Header */
+        .profile-header {
             text-align: center;
-            z-index: 10;
-            padding: 2rem;
-        }
-
-        .logo {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
-        }
-
-        .tagline {
-            font-size: 1.2rem;
             margin-bottom: 3rem;
-            color: #b8b8b8;
-            font-weight: 300;
+            padding: 2rem;
+            background: var(--dark);
+            color: var(--light);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .countdown {
-            margin: 3rem 0;
-        }
-
-        .countdown-title {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            color: #ffd93d;
-        }
-
-        .timer {
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, var(--accent), #FFD93D);
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 1.5rem;
-        }
-
-        .time-unit {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-            border-radius: 10px;
-            min-width: 80px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .time-number {
             font-size: 2.5rem;
-            font-weight: bold;
-            color: #ff6b6b;
+            color: white;
         }
 
-        .time-label {
+        .username {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .bio {
+            color: #ccc;
+            margin-bottom: 1.5rem;
             font-size: 0.9rem;
-            color: #b8b8b8;
-            margin-top: 0.5rem;
         }
 
-        .progress-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 2rem auto;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            height: 8px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
-            width: 0%;
-            transition: width 1s ease;
-            border-radius: 10px;
-        }
-
-        .message {
-            margin: 2rem 0;
-            font-size: 1.1rem;
-            color: #b8b8b8;
-        }
-
-        .highlight {
-            color: #ffd93d;
-            font-weight: bold;
-        }
-
-        .social-links {
-            margin-top: 2rem;
+        .stats {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
         }
 
-        .social-link {
-            color: #fff;
-            text-decoration: none;
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
             padding: 0.8rem 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: none;
             border-radius: 25px;
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        .post {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content {
+            font-size: 0.95rem;
+        }
+
+        /* Discover Section */
+        .discover-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .discover-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .discover-item:hover {
+            transform: translateX(5px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .user-details p {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        .follow-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--dark);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
         .social-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            background: var(--accent);
+            transform: translateY(-3px);
         }
 
-        .instagram {
-            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem 0.5rem;
+            }
+            
+            .profile-header {
+                padding: 1.5rem 1rem;
+            }
+            
+            .profile-pic {
+                width: 100px;
+                height: 100px;
+                font-size: 2rem;
+            }
+            
+            .username {
+                font-size: 1.5rem;
+            }
+            
+            .stats {
+                gap: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
         }
 
-        .pulse {
-            animation: pulse 2s infinite;
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @media (max-width: 768px) {
-            .logo { font-size: 2.5rem; }
-            .timer { gap: 1rem; }
-            .time-unit { min-width: 60px; padding: 0.8rem; }
-            .time-number { font-size: 2rem; }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
     </style>
 </head>
 <body>
-    <!-- Yıldızlar -->
-    <div class="stars" id="stars"></div>
-
     <div class="container">
-        <div class="logo pulse">💪 GYM BANTEM</div>
-        <div class="tagline">Profesyonel Fitness & Vücut Geliştirme</div>
-        
-        <div class="countdown">
-            <div class="countdown-title">⏳ Sitemiz Yeni Tasarımıyla Yakında</div>
-            <div class="timer">
-                <div class="time-unit">
-                    <div class="time-number" id="minutes">15</div>
-                    <div class="time-label">DAKİKA</div>
+        <!-- Profile Header -->
+        <header class="profile-header fade-in">
+            <div class="profile-pic">
+                S
+            </div>
+            <h1 class="username">symbntm</h1>
+            <p class="bio">Hafta sonu planların neler? ✨</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">1</span>
+                    <span class="stat-label">Gönderi</span>
                 </div>
-                <div class="time-unit">
-                    <div class="time-number" id="seconds">00</div>
-                    <div class="time-label">SANİYE</div>
+                <div class="stat">
+                    <span class="stat-number">17</span>
+                    <span class="stat-label">Takipçi</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">29</span>
+                    <span class="stat-label">Takip</span>
                 </div>
             </div>
-        </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary">Profili Düzenle</button>
+                <button class="btn btn-secondary">Profili Paylaş</button>
+            </div>
+        </header>
 
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
+        <!-- Recent Post -->
+        <section class="section fade-in">
+            <h2 class="section-title">
+                <i class="far fa-newspaper"></i>
+                SON GÖNDERİ
+            </h2>
+            <div class="post">
+                <div class="post-date">EVERYONE'S ONLY WANT ☆ 06.03.2023</div>
+                <div class="post-content">
+                    "Hayat, küçük anların büyük hikayeleridir. Her gün yeni bir sayfa, her an yeni bir fırsat..."
+                </div>
+            </div>
+        </section>
 
-        <div class="message">
-            🚀 <span class="highlight">Yepyeni bir tasarım</span> ve <span class="highlight">gelişmiş özelliklerle</span> çok yakında sizlerleyiz!
-        </div>
+        <!-- Discover People -->
+        <section class="section fade-in">
+            <h2 class="section-title">
+                <i class="fas fa-users"></i>
+                YENİ İNSANLAR KEŞFET
+            </h2>
+            <div class="discover-grid">
+                <div class="discover-item">
+                    <div class="user-info">
+                        <div class="user-avatar">B</div>
+                        <div class="user-details">
+                            <h4>Brown benpowi</h4>
+                            <p>+1 diğer kişi takip ediyor</p>
+                        </div>
+                    </div>
+                    <button class="follow-btn">Takip Et</button>
+                </div>
+                
+                <div class="discover-item">
+                    <div class="user-info">
+                        <div class="user-avatar">K</div>
+                        <div class="user-details">
+                            <h4>Kryox wdx.bulut</h4>
+                            <p>+3 diğer kişi takip ediyor</p>
+                        </div>
+                    </div>
+                    <button class="follow-btn">Takip Et</button>
+                </div>
+            </div>
+        </section>
 
-        <div class="social-links">
-            <a href="https://www.instagram.com/gymbntm" class="social-link instagram" target="_blank">
-                📸 Instagram'da Takip Et
+        <!-- Social Links -->
+        <div class="social-links fade-in">
+            <a href="https://www.instagram.com/symbntm" class="social-link" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fab fa-spotify"></i>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fab fa-twitter"></i>
             </a>
         </div>
     </div>
 
     <script>
-        // Yıldız oluşturma
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 150;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                // Rastgele pozisyon ve boyut
-                const size = Math.random() * 3;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.animationDelay = `${Math.random() * 3}s`;
-                
-                starsContainer.appendChild(star);
-            }
-        }
-
-        // Geri sayım
-        function startCountdown() {
-            const minutesElement = document.getElementById('minutes');
-            const secondsElement = document.getElementById('seconds');
-            const progressBar = document.getElementById('progressBar');
-            
-            let totalSeconds = 15 * 60; // 15 dakika
-            const totalTime = totalSeconds;
-            
-            const countdown = setInterval(() => {
-                const minutes = Math.floor(totalSeconds / 60);
-                const seconds = totalSeconds % 60;
-                
-                minutesElement.textContent = minutes.toString().padStart(2, '0');
-                secondsElement.textContent = seconds.toString().padStart(2, '0');
-                
-                // Progress bar güncelleme
-                const progress = ((totalTime - totalSeconds) / totalTime) * 100;
-                progressBar.style.width = `${progress}%`;
-                
-                if (totalSeconds <= 0) {
-                    clearInterval(countdown);
-                    minutesElement.textContent = '00';
-                    secondsElement.textContent = '00';
-                    progressBar.style.width = '100%';
-                    
-                    // Geri sayım bittiğinde mesajı güncelle
-                    document.querySelector('.message').innerHTML = 
-                        '🎉 <span class="highlight">Sitemiz hazır!</span> Yönlendiriliyorsunuz...';
-                    
-                    // 3 saniye sonra ana sayfaya yönlendir
-                    setTimeout(() => {
-                        window.location.href = 'ana-sayfa.html';
-                    }, 3000);
-                }
-                
-                totalSeconds--;
-            }, 1000);
-        }
-
-        // Sayfa yüklendiğinde
+        // Smooth animations
         document.addEventListener('DOMContentLoaded', function() {
-            createStars();
-            startCountdown();
-            
-            // Pulse animasyonu için
-            setInterval(() => {
-                document.querySelector('.logo').classList.toggle('pulse');
-            }, 2000);
+            // Add fade-in animation to sections on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = "1";
+                        entry.target.style.transform = "translateY(0)";
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.opacity = "0";
+                section.style.transform = "translateY(20px)";
+                section.style.transition = "all 0.6s ease-out";
+                observer.observe(section);
+            });
+
+            // Follow button interactions
+            document.querySelectorAll('.follow-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.textContent === 'Takip Et') {
+                        this.textContent = 'Takip Ediliyor';
+                        this.style.background = '#4CAF50';
+                    } else {
+                        this.textContent = 'Takip Et';
+                        this.style.background = 'var(--accent)';
+                    }
+                });
+            });
+
+            // Action buttons
+            document.querySelector('.btn-primary').addEventListener('click', function() {
+                alert('Profil düzenleme özelliği yakında eklenecek!');
+            });
+
+            document.querySelector('.btn-secondary').addEventListener('click', function() {
+                const currentUrl = window.location.href;
+                navigator.clipboard.writeText(currentUrl).then(() => {
+                    alert('Profil linki kopyalandı!');
+                });
+            });
         });
     </script>
 </body>
