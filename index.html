@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@mrttsbb - Instagram</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .profile-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+        
+        .username {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .bio {
+            font-size: 16px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #e1306c;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-instagram {
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            color: white;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            margin-top: 20px;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .highlight {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .highlight-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .story {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .story-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #405de6, #e1306c);
+            margin: 0 auto 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #4CAF50;
+        }
+        
+        .rate-limit-message {
+            display: none;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .bot-detected-message {
+            display: none;
+            background: rgba(255, 165, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .captcha-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .captcha-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            color: #333;
+            max-width: 300px;
+            width: 90%;
+        }
+        
+        .captcha-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #405de6;
+        }
+        
+        .captcha-success {
+            display: none;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .security-stats {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .security-stats div {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .g-recaptcha {
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .captcha-required {
+            border: 2px solid #ff6b6b !important;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { border-color: #ff6b6b; }
+            50% { border-color: #ff8e8e; }
+            100% { border-color: #ff6b6b; }
+        }
+    </style>
+</head>
+<body>
+    <!-- CAPTCHA Modal -->
+    <div id="captchaModal" class="captcha-modal">
+        <div class="captcha-content">
+            <div class="captcha-title">🤖 Güvenlik Doğrulaması</div>
+            <p>Lütfen bot olmadığınızı doğrulayın:</p>
+            
+            <!-- Google reCAPTCHA -->
+            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onCaptchaSuccess"></div>
+            
+            <div id="captchaSuccess" class="captcha-success">
+                ✅ Doğrulama başarılı! Yönlendiriliyorsunuz...
+            </div>
+            
+            <button onclick="closeCaptcha()" class="btn" style="margin-top: 15px;">Kapat</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Güvenlik Mesajları -->
+        <div id="rateLimitMessage" class="rate-limit-message">
+            <strong>🚫 DDoS Koruması Aktif!</strong><br>
+            Çok fazla istek algılandı. Lütfen 10 dakika bekleyin.
+        </div>
+        
+        <div id="botDetectedMessage" class="bot-detected-message">
+            <strong>🤖 Bot Tespit Edildi!</strong><br>
+            Şüpheli aktivite algılandı. Lütfen CAPTCHA doğrulaması yapın.
+            <button onclick="showCaptcha()" class="btn" style="margin-top: 10px;">CAPTCHA Doğrula</button>
+        </div>
+
+        <!-- Profil Kartı -->
+        <div class="profile-card">
+            <img src="https://via.placeholder.com/120" alt="Profil" class="profile-img">
+            <div class="username">@mrttsbb</div>
+            <div class="bio">🎯 Content Creator • 📸 Photography • 🚀 Digital Passion</div>
+            
+            <!-- İstatistikler -->
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">187</span>
+                    <span class="stat-label">Gönderi</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1.2K</span>
+                    <span class="stat-label">Takipçi</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">356</span>
+                    <span class="stat-label">Takip</span>
+                </div>
+            </div>
+            
+            <!-- Güvenlik İstatistikleri -->
+            <div class="security-stats">
+                <div>
+                    <span>🛡️ DDoS Engellemeler:</span>
+                    <span id="ddosBlocks">0</span>
+                </div>
+                <div>
+                    <span>🤖 Bot Tespitleri:</span>
+                    <span id="botDetections">0</span>
+                </div>
+                <div>
+                    <span>✅ CAPTCHA Doğrulamalar:</span>
+                    <span id="captchaVerifications">0</span>
+                </div>
+                <div>
+                    <span>🌐 Aktif Koruma:</span>
+                    <span>✅ Açık</span>
+                </div>
+            </div>
+            
+            <!-- Butonlar -->
+            <button onclick="handleInstagramClick()" class="btn btn-instagram">📱 Instagram'da Takip Et</button>
+            <button onclick="handleMessageClick()" class="btn">📩 Mesaj Gönder</button>
+            
+            <!-- Güvenlik Rozeti -->
+            <div class="security-badge">
+                <span>🛡️</span>
+                <span>DDoS + Botnet + reCAPTCHA Koruması Aktif</span>
+            </div>
+        </div>
+        
+        <!-- Hikayeler -->
+        <div class="highlight">
+            <div class="highlight-title">Hikayeler</div>
+            <div class="stories">
+                <div class="story">
+                    <div class="story-circle">📸</div>
+                    <div>Foto</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">🎥</div>
+                    <div>Video</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">🌍</div>
+                    <div>Gezi</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">⚡</div>
+                    <div>Günlük</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Galeri -->
+        <div class="highlight">
+            <div class="highlight-title">Son Gönderiler</div>
+            <div class="gallery">
+                <div class="gallery-item">📷</div>
+                <div class="gallery-item">🌅</div>
+                <div class="gallery-item">🎭</div>
+                <div class="gallery-item">🚀</div>
+                <div class="gallery-item">💻</div>
+                <div class="gallery-item">⭐</div>
+            </div>
+        </div>
+        
+        <!-- Öne Çıkanlar -->
+        <div class="highlight">
+            <div class="highlight-title">Öne Çıkanlar</div>
+            <div class="stories">
+                <div class="story">
+                    <div class="story-circle">❤️</div>
+                    <div>Beğenilenler</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">🏆</div>
+                    <div>Başarılar</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">📚</div>
+                    <div>İlham</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gelişmiş DDoS, Botnet ve reCAPTCHA Koruması
+        class AdvancedSecurity {
+            constructor() {
+                this.requestLimit = 30;
+                this.timeWindow = 30000;
+                this.banDuration = 600000;
+                this.requestLog = new Map();
+                this.ddosBlocks = 0;
+                this.botDetections = 0;
+                this.captchaVerifications = 0;
+                this.isHumanVerified = false;
+                
+                this.botPatterns = [
+                    'headless', 'phantom', 'puppeteer', 'selenium',
+                    'python', 'curl', 'wget', 'bot', 'crawler',
+                    'scraper', 'spider', 'automation'
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.startMonitoring();
+                this.updateStats();
+                
+                // Sayfa yüklendiğinde CAPTCHA kontrolü
+                this.checkInitialBehavior();
+            }
+            
+            getUserIdentifier() {
+                const fingerprint = [
+                    navigator.userAgent,
+                    navigator.language,
+                    screen.width + 'x' + screen.height,
+                    navigator.platform,
+                    new Date().getTimezoneOffset()
+                ].join('|');
+                
+                return btoa(fingerprint).substring(0, 16);
+            }
+            
+            detectBot() {
+                if (this.isHumanVerified) return false;
+                
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isBot = this.botPatterns.some(pattern => 
+                    userAgent.includes(pattern)
+                );
+                
+                // Mouse movement detection
+                let mouseMoved = false;
+                document.addEventListener('mousemove', () => {
+                    mouseMoved = true;
+                }, { once: true });
+                
+                // Human behavior simulation check
+                const hasHumanBehavior = mouseMoved || 
+                    document.hasFocus() || 
+                    navigator.userActivation.hasBeenActive;
+                
+                return isBot || !hasHumanBehavior;
+            }
+            
+            checkInitialBehavior() {
+                // İlk 3 saniye içinde insan etkileşimi kontrolü
+                setTimeout(() => {
+                    if (this.detectBot() && !this.isHumanVerified) {
+                        this.botDetections++;
+                        this.showBotDetectedMessage();
+                        this.updateStats();
+                    }
+                }, 3000);
+            }
+            
+            checkRateLimit() {
+                if (this.isHumanVerified) return true;
+                
+                const userID = this.getUserIdentifier();
+                const now = Date.now();
+                
+                if (!this.requestLog.has(userID)) {
+                    this.requestLog.set(userID, {
+                        count: 1,
+                        firstRequest: now,
+                        bannedUntil: null,
+                        lastRequest: now
+                    });
+                    return true;
+                }
+                
+                const userData = this.requestLog.get(userID);
+                
+                // Ban kontrolü
+                if (userData.bannedUntil && now < userData.bannedUntil) {
+                    this.showRateLimitMessage(userData.bannedUntil - now);
+                    return false;
+                }
+                
+                // Ban süresi dolmuşsa sıfırla
+                if (userData.bannedUntil && now >= userData.bannedUntil) {
+                    userData.count = 1;
+                    userData.firstRequest = now;
+                    userData.bannedUntil = null;
+                    this.hideRateLimitMessage();
+                }
+                
+                // Bot tespiti
+                if (this.detectBot()) {
+                    this.botDetections++;
+                    this.showBotDetectedMessage();
+                    userData.bannedUntil = now + this.banDuration;
+                    this.updateStats();
+                    return false;
+                }
+                
+                // Hızlı istek kontrolü
+                const timeSinceLastRequest = now - userData.lastRequest;
+                if (timeSinceLastRequest < 100) {
+                    userData.count += 5;
+                }
+                
+                // Zaman penceresi kontrolü
+                if (now - userData.firstRequest > this.timeWindow) {
+                    userData.count = 1;
+                    userData.firstRequest = now;
+                } else {
+                    userData.count++;
+                    
+                    if (userData.count > this.requestLimit) {
+                        this.ddosBlocks++;
+                        userData.bannedUntil = now + this.banDuration;
+                        this.showRateLimitMessage(this.banDuration);
+                        this.updateStats();
+                        return false;
+                    }
+                }
+                
+                userData.lastRequest = now;
+                this.requestLog.set(userID, userData);
+                return true;
+            }
+            
+            verifyHuman() {
+                this.isHumanVerified = true;
+                this.captchaVerifications++;
+                this.updateStats();
+                this.hideBotDetectedMessage();
+                this.hideRateLimitMessage();
+                this.undimContent();
+                
+                // Butonları aktif et
+                document.querySelectorAll('.btn').forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('captcha-required');
+                });
+            }
+            
+            showRateLimitMessage(remainingTime) {
+                const messageElement = document.getElementById('rateLimitMessage');
+                const minutes = Math.ceil(remainingTime / 60000);
+                messageElement.innerHTML = `
+                    <strong>🚫 DDoS Koruması Aktif!</strong><br>
+                    Çok fazla istek algılandı. Lütfen ${minutes} dakika bekleyin.
+                    ${!this.isHumanVerified ? '<br><button onclick="showCaptcha()" class="btn" style="margin-top: 10px;">CAPTCHA İle Doğrula</button>' : ''}
+                `;
+                messageElement.style.display = 'block';
+                this.dimContent();
+            }
+            
+            showBotDetectedMessage() {
+                const messageElement = document.getElementById('botDetectedMessage');
+                messageElement.style.display = 'block';
+                this.dimContent();
+                
+                // Butonları devre dışı bırak
+                document.querySelectorAll('.btn').forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('captcha-required');
+                });
+            }
+            
+            hideRateLimitMessage() {
+                const messageElement = document.getElementById('rateLimitMessage');
+                messageElement.style.display = 'none';
+            }
+            
+            hideBotDetectedMessage() {
+                const messageElement = document.getElementById('botDetectedMessage');
+                messageElement.style.display = 'none';
+            }
+            
+            dimContent() {
+                document.querySelector('.profile-card').style.opacity = '0.5';
+                document.querySelectorAll('.highlight').forEach(el => {
+                    el.style.opacity = '0.5';
+                });
+            }
+            
+            undimContent() {
+                document.querySelector('.profile-card').style.opacity = '1';
+                document.querySelectorAll('.highlight').forEach(el => {
+                    el.style.opacity = '1';
+                });
+            }
+            
+            updateStats() {
+                document.getElementById('ddosBlocks').textContent = this.ddosBlocks;
+                document.getElementById('botDetections').textContent = this.botDetections;
+                document.getElementById('captchaVerifications').textContent = this.captchaVerifications;
+            }
+            
+            setupEventListeners() {
+                document.addEventListener('click', (event) => {
+                    if (!this.isHumanVerified && !this.checkRateLimit()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                });
+                
+                document.addEventListener('keydown', (event) => {
+                    if (!this.isHumanVerified && !this.checkRateLimit()) {
+                        event.preventDefault();
+                    }
+                });
+            }
+            
+            startMonitoring() {
+                setInterval(() => {
+                    this.cleanup();
+                }, 60000);
+            }
+            
+            cleanup() {
+                const now = Date.now();
+                for (let [userID, userData] of this.requestLog.entries()) {
+                    if (now - userData.firstRequest > 3600000) {
+                        this.requestLog.delete(userID);
+                    }
+                }
+            }
+        }
+        
+        // Global fonksiyonlar
+        const securitySystem = new AdvancedSecurity();
+        
+        function showCaptcha() {
+            document.getElementById('captchaModal').style.display = 'flex';
+        }
+        
+        function closeCaptcha() {
+            document.getElementById('captchaModal').style.display = 'none';
+        }
+        
+        function onCaptchaSuccess(response) {
+            document.getElementById('captchaSuccess').style.display = 'block';
+            
+            setTimeout(() => {
+                securitySystem.verifyHuman();
+                closeCaptcha();
+                
+                // reCAPTCHA'yı resetle
+                grecaptcha.reset();
+                document.getElementById('captchaSuccess').style.display = 'none';
+            }, 2000);
+        }
+        
+        function handleInstagramClick() {
+            if (securitySystem.isHumanVerified) {
+                window.open('https://instagram.com/mrttsbb', '_blank');
+            } else {
+                showCaptcha();
+            }
+        }
+        
+        function handleMessageClick() {
+            if (securitySystem.isHumanVerified) {
+                window.open('https://instagram.com/mrttsbb', '_blank');
+            } else {
+                showCaptcha();
+            }
+        }
+        
+        // Sayfa görünürlüğü değişimini izle
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                securitySystem.checkRateLimit();
+            }
+        });
+    </script>
+</body>
+</html>
