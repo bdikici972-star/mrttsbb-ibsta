@@ -3,433 +3,994 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>symbntm - Kişisel Profil</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>@mrttsbb - Instagram</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        :root {
-            --accent: #FF6B6B;
-            --dark: #1A1A1A;
-            --light: #F5F5F5;
-            --gray: #666;
-        }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            transition: all 0.5s ease;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
+        /* Bakım Modu Stilleri */
+        body.maintenance-mode {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            animation: stars 20s linear infinite;
         }
 
-        /* Profile Header */
-        .profile-header {
+        @keyframes stars {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .maintenance-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: var(--dark);
-            color: var(--light);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .profile-pic {
+        .maintenance-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+            width: 90%;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(74, 144, 226, 0.5); }
+            to { box-shadow: 0 0 30px rgba(142, 45, 226, 0.8); }
+        }
+
+        .maintenance-clock {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #4A90E2, #8E2DE2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(74, 144, 226, 0.5);
+        }
+
+        .maintenance-greeting {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .maintenance-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .maintenance-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .countdown {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.7);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #4A90E2, #8E2DE2);
+            border-radius: 5px;
+            transition: width 1s ease;
+            width: 0%;
+        }
+
+        .maintenance-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border-left: 4px solid #4A90E2;
+        }
+
+        .moon {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 80px;
+            height: 80px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+            animation: moonGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes moonGlow {
+            from { box-shadow: 0 0 50px rgba(255, 255, 255, 0.5); }
+            to { box-shadow: 0 0 80px rgba(255, 255, 255, 0.8); }
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .profile-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .profile-img {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            margin: 0 auto 1rem;
-            background: linear-gradient(45deg, var(--accent), #FFD93D);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: white;
+            border: 4px solid white;
+            margin-bottom: 15px;
+            object-fit: cover;
         }
-
+        
         .username {
-            font-size: 2rem;
-            font-weight: 300;
-            margin-bottom: 0.5rem;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-
+        
         .bio {
-            color: #ccc;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            font-size: 16px;
+            margin-bottom: 20px;
+            opacity: 0.9;
         }
-
+        
         .stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
         }
-
-        .stat {
-            text-align: center;
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 12px;
         }
-
+        
         .stat-number {
-            font-size: 1.2rem;
+            font-size: 20px;
             font-weight: bold;
             display: block;
         }
-
+        
         .stat-label {
-            font-size: 0.8rem;
-            color: #999;
+            font-size: 12px;
+            opacity: 0.8;
         }
-
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
+        
         .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
+            display: inline-block;
+            background: white;
+            color: #e1306c;
+            padding: 12px 30px;
             border-radius: 25px;
-            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.3s ease;
             cursor: pointer;
-            transition: all 0.3s;
+            border: none;
         }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-        }
-
+        
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
         }
-
-        /* Content Sections */
-        .section {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        
+        .btn-instagram {
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            color: white;
         }
-
-        .section-title {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
-
-        .post {
-            background: var(--light);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--accent);
-        }
-
-        .post-date {
-            font-size: 0.8rem;
-            color: var(--gray);
-            margin-bottom: 0.5rem;
-        }
-
-        .post-content {
-            font-size: 0.95rem;
-        }
-
-        /* Discover Section */
-        .discover-grid {
+        
+        .gallery {
             display: grid;
-            gap: 1rem;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            margin-top: 20px;
         }
-
-        .discover-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem;
-            background: var(--light);
+        
+        .gallery-item {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            transition: transform 0.3s;
-        }
-
-        .discover-item:hover {
-            transform: translateX(5px);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--gray);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 0.8rem;
+            font-size: 24px;
         }
-
-        .user-details h4 {
-            font-size: 0.9rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .user-details p {
-            font-size: 0.7rem;
-            color: var(--gray);
-        }
-
-        .follow-btn {
-            padding: 0.5rem 1rem;
-            background: var(--accent);
-            color: white;
-            border: none;
+        
+        .highlight {
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 15px;
-            font-size: 0.8rem;
-            cursor: pointer;
+            padding: 20px;
+            margin: 15px 0;
         }
-
-        /* Social Links */
-        .social-links {
+        
+        .highlight-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stories {
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
         }
-
-        .social-link {
-            width: 45px;
-            height: 45px;
+        
+        .story {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .story-circle {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: var(--dark);
-            color: white;
+            background: linear-gradient(45deg, #405de6, #e1306c);
+            margin: 0 auto 5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
-            transition: all 0.3s;
+            font-size: 20px;
         }
-
-        .social-link:hover {
-            background: var(--accent);
-            transform: translateY(-3px);
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #4CAF50;
         }
-
-        /* Mobile Responsive */
-        @media (max-width: 480px) {
-            .container {
-                padding: 1rem 0.5rem;
-            }
-            
-            .profile-header {
-                padding: 1.5rem 1rem;
-            }
-            
-            .profile-pic {
-                width: 100px;
-                height: 100px;
-                font-size: 2rem;
-            }
-            
-            .username {
-                font-size: 1.5rem;
-            }
-            
-            .stats {
-                gap: 1rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 200px;
-            }
+        
+        .rate-limit-message {
+            display: none;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: shake 0.5s ease-in-out;
         }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        .bot-detected-message {
+            display: none;
+            background: rgba(255, 165, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
+        
+        .captcha-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .captcha-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            color: #333;
+            max-width: 300px;
+            width: 90%;
+        }
+        
+        .captcha-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #405de6;
+        }
+        
+        .captcha-success {
+            display: none;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .security-stats {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .security-stats div {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .g-recaptcha {
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .captcha-required {
+            border: 2px solid #ff6b6b !important;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { border-color: #ff6b6b; }
+            50% { border-color: #ff8e8e; }
+            100% { border-color: #ff6b6b; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Profile Header -->
-        <header class="profile-header fade-in">
-            <div class="profile-pic">
-                S
+    <!-- Yıldızlar Arkaplan -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Ay -->
+    <div class="moon"></div>
+
+    <!-- Bakım Ekranı -->
+    <div id="maintenanceScreen" class="maintenance-screen">
+        <div class="maintenance-content">
+            <div class="maintenance-clock" id="maintenanceClock">00:00:00</div>
+            <div class="maintenance-greeting" id="maintenanceGreeting">Günaydın!</div>
+            <div class="maintenance-title">🚧 Bakım Modu</div>
+            <div class="maintenance-message">
+                Sistem şu anda planlı bakım çalışması nedeniyle geçici olarak kullanıma kapalıdır.
+                Lütfen 30 dakika sonra tekrar deneyin.
             </div>
-            <h1 class="username">symbntm</h1>
-            <p class="bio">Hafta sonu planların neler? ✨</p>
             
+            <div class="countdown" id="countdown">30:00</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="maintenance-info">
+                <strong>⏰ Tahmini Tamamlanma:</strong><br>
+                <span id="completionTime">00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CAPTCHA Modal -->
+    <div id="captchaModal" class="captcha-modal">
+        <div class="captcha-content">
+            <div class="captcha-title">🤖 Güvenlik Doğrulaması</div>
+            <p>Lütfen bot olmadığınızı doğrulayın:</p>
+            
+            <!-- Google reCAPTCHA -->
+            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onCaptchaSuccess"></div>
+            
+            <div id="captchaSuccess" class="captcha-success">
+                ✅ Doğrulama başarılı! Yönlendiriliyorsunuz...
+            </div>
+            
+            <button onclick="closeCaptcha()" class="btn" style="margin-top: 15px;">Kapat</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Güvenlik Mesajları -->
+        <div id="rateLimitMessage" class="rate-limit-message">
+            <strong>🚫 DDoS Koruması Aktif!</strong><br>
+            Çok fazla istek algılandı. Lütfen 10 dakika bekleyin.
+        </div>
+        
+        <div id="botDetectedMessage" class="bot-detected-message">
+            <strong>🤖 Bot Tespit Edildi!</strong><br>
+            Şüpheli aktivite algılandı. Lütfen CAPTCHA doğrulaması yapın.
+            <button onclick="showCaptcha()" class="btn" style="margin-top: 10px;">CAPTCHA Doğrula</button>
+        </div>
+
+        <!-- Profil Kartı -->
+        <div class="profile-card">
+            <img src="https://via.placeholder.com/120" alt="Profil" class="profile-img">
+            <div class="username">@mrttsbb</div>
+            <div class="bio">🎯 Content Creator • 📸 Photography • 🚀 Digital Passion</div>
+            
+            <!-- İstatistikler -->
             <div class="stats">
-                <div class="stat">
-                    <span class="stat-number">1</span>
+                <div class="stat-item">
+                    <span class="stat-number">187</span>
                     <span class="stat-label">Gönderi</span>
                 </div>
-                <div class="stat">
-                    <span class="stat-number">17</span>
+                <div class="stat-item">
+                    <span class="stat-number">1.2K</span>
                     <span class="stat-label">Takipçi</span>
                 </div>
-                <div class="stat">
-                    <span class="stat-number">29</span>
+                <div class="stat-item">
+                    <span class="stat-number">356</span>
                     <span class="stat-label">Takip</span>
                 </div>
             </div>
             
-            <div class="action-buttons">
-                <button class="btn btn-primary">Profili Düzenle</button>
-                <button class="btn btn-secondary">Profili Paylaş</button>
-            </div>
-        </header>
-
-        <!-- Recent Post -->
-        <section class="section fade-in">
-            <h2 class="section-title">
-                <i class="far fa-newspaper"></i>
-                SON GÖNDERİ
-            </h2>
-            <div class="post">
-                <div class="post-date">EVERYONE'S ONLY WANT ☆ 06.03.2023</div>
-                <div class="post-content">
-                    "Hayat, küçük anların büyük hikayeleridir. Her gün yeni bir sayfa, her an yeni bir fırsat..."
+            <!-- Güvenlik İstatistikleri -->
+            <div class="security-stats">
+                <div>
+                    <span>🛡️ DDoS Engellemeler:</span>
+                    <span id="ddosBlocks">0</span>
+                </div>
+                <div>
+                    <span>🤖 Bot Tespitleri:</span>
+                    <span id="botDetections">0</span>
+                </div>
+                <div>
+                    <span>✅ CAPTCHA Doğrulamalar:</span>
+                    <span id="captchaVerifications">0</span>
+                </div>
+                <div>
+                    <span>🌐 Aktif Koruma:</span>
+                    <span>✅ Açık</span>
                 </div>
             </div>
-        </section>
-
-        <!-- Discover People -->
-        <section class="section fade-in">
-            <h2 class="section-title">
-                <i class="fas fa-users"></i>
-                YENİ İNSANLAR KEŞFET
-            </h2>
-            <div class="discover-grid">
-                <div class="discover-item">
-                    <div class="user-info">
-                        <div class="user-avatar">B</div>
-                        <div class="user-details">
-                            <h4>Brown benpowi</h4>
-                            <p>+1 diğer kişi takip ediyor</p>
-                        </div>
-                    </div>
-                    <button class="follow-btn">Takip Et</button>
+            
+            <!-- Butonlar -->
+            <button onclick="handleInstagramClick()" class="btn btn-instagram">📱 Instagram'da Takip Et</button>
+            <button onclick="handleMessageClick()" class="btn">📩 Mesaj Gönder</button>
+            
+            <!-- Bakım Butonu -->
+            <button onclick="startMaintenance()" class="btn" style="background: #ff6b6b; color: white; margin-top: 10px;">
+                🚧 Bakım Modunu Başlat (30dk)
+            </button>
+            
+            <!-- Güvenlik Rozeti -->
+            <div class="security-badge">
+                <span>🛡️</span>
+                <span>DDoS + Botnet + reCAPTCHA + Bakım Koruması Aktif</span>
+            </div>
+        </div>
+        
+        <!-- Hikayeler -->
+        <div class="highlight">
+            <div class="highlight-title">Hikayeler</div>
+            <div class="stories">
+                <div class="story">
+                    <div class="story-circle">📸</div>
+                    <div>Foto</div>
                 </div>
-                
-                <div class="discover-item">
-                    <div class="user-info">
-                        <div class="user-avatar">K</div>
-                        <div class="user-details">
-                            <h4>Kryox wdx.bulut</h4>
-                            <p>+3 diğer kişi takip ediyor</p>
-                        </div>
-                    </div>
-                    <button class="follow-btn">Takip Et</button>
+                <div class="story">
+                    <div class="story-circle">🎥</div>
+                    <div>Video</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">🌍</div>
+                    <div>Gezi</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">⚡</div>
+                    <div>Günlük</div>
                 </div>
             </div>
-        </section>
-
-        <!-- Social Links -->
-        <div class="social-links fade-in">
-            <a href="https://www.instagram.com/symbntm" class="social-link" target="_blank">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="#" class="social-link">
-                <i class="fab fa-tiktok"></i>
-            </a>
-            <a href="#" class="social-link">
-                <i class="fab fa-spotify"></i>
-            </a>
-            <a href="#" class="social-link">
-                <i class="fab fa-twitter"></i>
-            </a>
+        </div>
+        
+        <!-- Galeri -->
+        <div class="highlight">
+            <div class="highlight-title">Son Gönderiler</div>
+            <div class="gallery">
+                <div class="gallery-item">📷</div>
+                <div class="gallery-item">🌅</div>
+                <div class="gallery-item">🎭</div>
+                <div class="gallery-item">🚀</div>
+                <div class="gallery-item">💻</div>
+                <div class="gallery-item">⭐</div>
+            </div>
+        </div>
+        
+        <!-- Öne Çıkanlar -->
+        <div class="highlight">
+            <div class="highlight-title">Öne Çıkanlar</div>
+            <div class="stories">
+                <div class="story">
+                    <div class="story-circle">❤️</div>
+                    <div>Beğenilenler</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">🏆</div>
+                    <div>Başarılar</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">📚</div>
+                    <div>İlham</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Smooth animations
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add fade-in animation to sections on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
+        // Yıldızları oluştur
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
 
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = "1";
-                        entry.target.style.transform = "translateY(0)";
+        // Saat ve selamlama güncelleme
+        function updateClockAndGreeting() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('maintenanceClock').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            let greeting = '';
+            if (hours >= 5 && hours < 12) {
+                greeting = 'Günaydın! ☀️';
+            } else if (hours >= 12 && hours < 17) {
+                greeting = 'Tünaydın! 🌤️';
+            } else if (hours >= 17 && hours < 22) {
+                greeting = 'İyi akşamlar! 🌙';
+            } else {
+                greeting = 'İyi geceler! 🌟';
+            }
+            
+            document.getElementById('maintenanceGreeting').textContent = greeting;
+        }
+
+        // Bakım modu değişkenleri
+        let maintenanceTimer = null;
+        let maintenanceEndTime = null;
+
+        // Bakım modunu başlat
+        function startMaintenance() {
+            const maintenanceScreen = document.getElementById('maintenanceScreen');
+            const progressBar = document.getElementById('progressBar');
+            const countdown = document.getElementById('countdown');
+            const completionTime = document.getElementById('completionTime');
+            
+            // Bakım süresi 30 dakika
+            const maintenanceDuration = 30 * 60 * 1000; // 30 dakika
+            maintenanceEndTime = Date.now() + maintenanceDuration;
+            
+            // Arkaplanı gece moduna geçir
+            document.body.classList.add('maintenance-mode');
+            
+            // Bakım ekranını göster
+            maintenanceScreen.style.display = 'flex';
+            
+            // Tamamlanma saatini hesapla
+            const endTime = new Date(maintenanceEndTime);
+            completionTime.textContent = endTime.toLocaleTimeString('tr-TR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            // Geri sayımı başlat
+            maintenanceTimer = setInterval(() => {
+                const now = Date.now();
+                const remaining = maintenanceEndTime - now;
+                
+                if (remaining <= 0) {
+                    // Bakım süresi doldu
+                    clearInterval(maintenanceTimer);
+                    endMaintenance();
+                    return;
+                }
+                
+                // Geri sayımı güncelle
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                countdown.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Progress bar'ı güncelle
+                const progress = 100 - (remaining / maintenanceDuration * 100);
+                progressBar.style.width = progress + '%';
+                
+            }, 1000);
+        }
+
+        // Bakım modunu bitir
+        function endMaintenance() {
+            const maintenanceScreen = document.getElementById('maintenanceScreen');
+            
+            // Arkaplanı normal moda geçir
+            document.body.classList.remove('maintenance-mode');
+            
+            // Bakım ekranını gizle
+            maintenanceScreen.style.display = 'none';
+            
+            // Timer'ı temizle
+            if (maintenanceTimer) {
+                clearInterval(maintenanceTimer);
+                maintenanceTimer = null;
+            }
+            
+            alert('✅ Bakım çalışması tamamlandı! Sistem tekrar aktif.');
+        }
+
+        // Gelişmiş DDoS, Botnet ve reCAPTCHA Koruması
+        class AdvancedSecurity {
+            constructor() {
+                this.requestLimit = 30;
+                this.timeWindow = 30000;
+                this.banDuration = 600000;
+                this.requestLog = new Map();
+                this.ddosBlocks = 0;
+                this.botDetections = 0;
+                this.captchaVerifications = 0;
+                this.isHumanVerified = false;
+                
+                this.botPatterns = [
+                    'headless', 'phantom', 'puppeteer', 'selenium',
+                    'python', 'curl', 'wget', 'bot', 'crawler',
+                    'scraper', 'spider', 'automation'
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.startMonitoring();
+                this.updateStats();
+                this.checkInitialBehavior();
+            }
+            
+            getUserIdentifier() {
+                const fingerprint = [
+                    navigator.userAgent,
+                    navigator.language,
+                    screen.width + 'x' + screen.height,
+                    navigator.platform,
+                    new Date().getTimezoneOffset()
+                ].join('|');
+                
+                return btoa(fingerprint).substring(0, 16);
+            }
+            
+            detectBot() {
+                if (this.isHumanVerified) return false;
+                
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isBot = this.botPatterns.some(pattern => 
+                    userAgent.includes(pattern)
+                );
+                
+                let mouseMoved = false;
+                document.addEventListener('mousemove', () => {
+                    mouseMoved = true;
+                }, { once: true });
+                
+                const hasHumanBehavior = mouseMoved || 
+                    document.hasFocus() || 
+                    navigator.userActivation.hasBeenActive;
+                
+                return isBot || !hasHumanBehavior;
+            }
+            
+            checkInitialBehavior() {
+                setTimeout(() => {
+                    if (this.detectBot() && !this.isHumanVerified) {
+                        this.botDetections++;
+                        this.showBotDetectedMessage();
+                        this.updateStats();
+                    }
+                }, 3000);
+            }
+            
+            checkRateLimit() {
+                if (this.isHumanVerified) return true;
+                
+                const userID = this.getUserIdentifier();
+                const now = Date.now();
+                
+                if (!this.requestLog.has(userID)) {
+                    this.requestLog.set(userID, {
+                        count: 1,
+                        firstRequest: now,
+                        bannedUntil: null,
+                        lastRequest: now
+                    });
+                    return true;
+                }
+                
+                const userData = this.requestLog.get(userID);
+                
+                if (userData.bannedUntil && now < userData.bannedUntil) {
+                    this.showRateLimitMessage(userData.bannedUntil - now);
+                    return false;
+                }
+                
+                if (userData.bannedUntil && now >= userData.bannedUntil) {
+                    userData.count = 1;
+                    userData.firstRequest = now;
+                    userData.bannedUntil = null;
+                    this.hideRateLimitMessage();
+                }
+                
+                if (this.detectBot()) {
+                    this.botDetections++;
+                    this.showBotDetectedMessage();
+                    userData.bannedUntil = now + this.banDuration;
+                    this.updateStats();
+                    return false;
+                }
+                
+                const timeSinceLastRequest = now - userData.lastRequest;
+                if (timeSinceLastRequest < 100) {
+                    userData.count += 5;
+                }
+                
+                if (now - userData.firstRequest > this.timeWindow) {
+                    userData.count = 1;
+                    userData.firstRequest = now;
+                } else {
+                    userData.count++;
+                    
+                    if (userData.count > this.requestLimit) {
+                        this.ddosBlocks++;
+                        userData.bannedUntil = now + this.banDuration;
+                        this.showRateLimitMessage(this.banDuration);
+                        this.updateStats();
+                        return false;
+                    }
+                }
+                
+                userData.lastRequest = now;
+                this.requestLog.set(userID, userData);
+                return true;
+            }
+            
+            verifyHuman() {
+                this.isHumanVerified = true;
+                this.captchaVerifications++;
+                this.updateStats();
+                this.hideBotDetectedMessage();
+                this.hideRateLimitMessage();
+                this.undimContent();
+                
+                document.querySelectorAll('.btn').forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('captcha-required');
+                });
+            }
+            
+            showRateLimitMessage(remainingTime) {
+                const messageElement = document.getElementById('rateLimitMessage');
+                const minutes = Math.ceil(remainingTime / 60000);
+                messageElement.innerHTML = `
+                    <strong>🚫 DDoS Koruması Aktif!</strong><br>
+                    Çok fazla istek algılandı. Lütfen ${minutes} dakika bekleyin.
+                    ${!this.isHumanVerified ? '<br><button onclick="showCaptcha()" class="btn" style="margin-top: 10px;">CAPTCHA İle Doğrula</button>' : ''}
+                `;
+                messageElement.style.display = 'block';
+                this.dimContent();
+            }
+            
+            showBotDetectedMessage() {
+                const messageElement = document.getElementById('botDetectedMessage');
+                messageElement.style.display = 'block';
+                this.dimContent();
+                
+                document.querySelectorAll('.btn').forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('captcha-required');
+                });
+            }
+            
+            hideRateLimitMessage() {
+                const messageElement = document.getElementById('rateLimitMessage');
+                messageElement.style.display = 'none';
+            }
+            
+            hideBotDetectedMessage() {
+                const messageElement = document.getElementById('botDetectedMessage');
+                messageElement.style.display = 'none';
+            }
+            
+            dimContent() {
+                document.querySelector('.profile-card').style.opacity = '0.5';
+                document.querySelectorAll('.highlight').forEach(el => {
+                    el.style.opacity = '0.5';
+                });
+            }
+            
+            undimContent() {
+                document.querySelector('.profile-card').style.opacity = '1';
+                document.querySelectorAll('.highlight').forEach(el => {
+                    el.style.opacity = '1';
+                });
+            }
+            
+            updateStats() {
+                document.getElementById('ddosBlocks').textContent = this.ddosBlocks;
+                document.getElementById('botDetections').textContent = this.botDetections;
+                document.getElementById('captchaVerifications').textContent = this.captchaVerifications;
+            }
+            
+            setupEventListeners() {
+                document.addEventListener('click', (event) => {
+                    if (!this.isHumanVerified && !this.checkRateLimit()) {
+                        event.preventDefault();
+                        event.stopPropagation();
                     }
                 });
-            }, observerOptions);
-
-            // Observe all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.style.opacity = "0";
-                section.style.transform = "translateY(20px)";
-                section.style.transition = "all 0.6s ease-out";
-                observer.observe(section);
-            });
-
-            // Follow button interactions
-            document.querySelectorAll('.follow-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (this.textContent === 'Takip Et') {
-                        this.textContent = 'Takip Ediliyor';
-                        this.style.background = '#4CAF50';
-                    } else {
-                        this.textContent = 'Takip Et';
-                        this.style.background = 'var(--accent)';
+                
+                document.addEventListener('keydown', (event) => {
+                    if (!this.isHumanVerified && !this.checkRateLimit()) {
+                        event.preventDefault();
                     }
                 });
-            });
-
-            // Action buttons
-            document.querySelector('.btn-primary').addEventListener('click', function() {
-                alert('Profil düzenleme özelliği yakında eklenecek!');
-            });
-
-            document.querySelector('.btn-secondary').addEventListener('click', function() {
-                const currentUrl = window.location.href;
-                navigator.clipboard.writeText(currentUrl).then(() => {
-                    alert('Profil linki kopyalandı!');
-                });
-            });
+            }
+            
+            startMonitoring() {
+                setInterval(() => {
+                    this.cleanup();
+                }, 60000);
+            }
+            
+            cleanup() {
+                const now = Date.now();
+                for (let [userID, userData] of this.requestLog.entries()) {
+                    if (now - userData.firstRequest > 3600000) {
+                        this.requestLog.delete(userID);
+                    }
+                }
+            }
+        }
+        
+        // Global fonksiyonlar
+        const securitySystem = new AdvancedSecurity();
+        
+        function showCaptcha() {
+            document.getElementById('captchaModal').style.display = 'flex';
+        }
+        
+        function closeCaptcha() {
+            document.getElementById('captchaModal').style.display = 'none';
+        }
+        
+        function onCaptchaSuccess(response) {
+            document.getElementById('captchaSuccess').style.display = 'block';
+            
+            setTimeout(() => {
+                securitySystem.verifyHuman();
+                closeCaptcha();
+                grecaptcha.reset();
+                document.getElementById('captchaSuccess').style.display = 'none';
+            }, 2000);
+        }
+        
+        function handleInstagramClick() {
+            if (securitySystem.isHumanVerified) {
+                window.open('https://instagram.com/mrttsbb', '_blank');
+            } else {
+                showCaptcha();
+            }
+        }
+        
+        function handleMessageClick() {
+            if (securitySystem.isHumanVerified) {
+                window.open('https://instagram.com/mrttsbb', '_blank');
+            } else {
+                showCaptcha();
+            }
+        }
+        
+        // Sayfa yüklendiğinde
+        window.addEventListener('load', function() {
+            createStars();
+            updateClockAndGreeting();
+            setInterval(updateClockAndGreeting, 1000);
+            securitySystem.checkRateLimit();
+        });
+        
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                securitySystem.checkRateLimit();
+            }
         });
     </script>
 </body>
-</html>
+    </html>
