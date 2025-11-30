@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@mrttsbb - Instagram</title>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <title>Bakım Modu - Instagram</title>
     <style>
         * {
             margin: 0;
@@ -14,23 +13,13 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
             color: white;
             min-height: 100vh;
-            transition: all 0.5s ease;
-        }
-
-        /* Bakım Modu Stilleri */
-        body.maintenance-mode {
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
-            animation: stars 20s linear infinite;
-        }
-
-        @keyframes stars {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
         .stars {
@@ -54,373 +43,177 @@
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
         }
-        
-        .maintenance-screen {
-            display: none;
+
+        .moon {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
+            top: 50px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            background: #f8f8f8;
+            border-radius: 50%;
+            box-shadow: 
+                0 0 60px rgba(255, 255, 255, 0.8),
+                0 0 100px rgba(255, 255, 255, 0.4);
+            animation: moonGlow 4s ease-in-out infinite alternate;
         }
 
-        .maintenance-content {
+        @keyframes moonGlow {
+            from { 
+                box-shadow: 
+                    0 0 60px rgba(255, 255, 255, 0.8),
+                    0 0 100px rgba(255, 255, 255, 0.4);
+            }
+            to { 
+                box-shadow: 
+                    0 0 80px rgba(255, 255, 255, 1),
+                    0 0 120px rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        .maintenance-container {
+            text-align: center;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border-radius: 25px;
-            padding: 50px;
+            padding: 60px 40px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 500px;
+            max-width: 600px;
             width: 90%;
             animation: glow 2s ease-in-out infinite alternate;
         }
 
         @keyframes glow {
-            from { box-shadow: 0 0 20px rgba(74, 144, 226, 0.5); }
-            to { box-shadow: 0 0 30px rgba(142, 45, 226, 0.8); }
+            from { 
+                box-shadow: 
+                    0 0 30px rgba(74, 144, 226, 0.5),
+                    inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            to { 
+                box-shadow: 
+                    0 0 50px rgba(142, 45, 226, 0.8),
+                    inset 0 0 30px rgba(255, 255, 255, 0.2);
+            }
         }
 
         .maintenance-clock {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: bold;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #4A90E2, #8E2DE2);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #4A90E2, #8E2DE2, #E1306C);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(74, 144, 226, 0.5);
+            text-shadow: 0 0 40px rgba(74, 144, 226, 0.5);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
         }
 
         .maintenance-greeting {
-            font-size: 2rem;
-            margin-bottom: 30px;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
             color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            font-weight: 300;
         }
 
         .maintenance-title {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+
+        .maintenance-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .maintenance-message {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            font-size: 1.3rem;
+            margin-bottom: 40px;
             line-height: 1.6;
             color: #ccc;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .countdown-container {
+            margin: 40px 0;
         }
 
         .countdown {
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: bold;
             margin: 20px 0;
             color: #ff6b6b;
-            text-shadow: 0 0 20px rgba(255, 107, 107, 0.7);
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
         }
 
         .progress-container {
             width: 100%;
-            height: 10px;
+            height: 12px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin: 20px 0;
+            border-radius: 6px;
+            margin: 30px 0;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(45deg, #4A90E2, #8E2DE2);
-            border-radius: 5px;
+            background: linear-gradient(45deg, #4A90E2, #8E2DE2, #E1306C);
+            border-radius: 6px;
             transition: width 1s ease;
             width: 0%;
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
         }
 
         .maintenance-info {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 40px;
+            padding: 25px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             border-left: 4px solid #4A90E2;
         }
 
-        .moon {
-            position: absolute;
-            top: 50px;
-            right: 50px;
-            width: 80px;
-            height: 80px;
-            background: #f0f0f0;
-            border-radius: 50%;
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
-            animation: moonGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes moonGlow {
-            from { box-shadow: 0 0 50px rgba(255, 255, 255, 0.5); }
-            to { box-shadow: 0 0 80px rgba(255, 255, 255, 0.8); }
-        }
-        
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .profile-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 4px solid white;
-            margin-bottom: 15px;
-            object-fit: cover;
-        }
-        
-        .username {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        
-        .bio {
-            font-size: 16px;
-            margin-bottom: 20px;
-            opacity: 0.9;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .stat-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            border-radius: 12px;
-        }
-        
-        .stat-number {
-            font-size: 20px;
-            font-weight: bold;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: white;
-            color: #e1306c;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 5px;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .btn-instagram {
-            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
-            color: white;
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .gallery {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 5px;
-            margin-top: 20px;
-        }
-        
-        .gallery-item {
-            aspect-ratio: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-        
-        .highlight {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        
-        .highlight-title {
-            font-size: 18px;
+        .info-title {
+            font-size: 1.2rem;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #4A90E2;
         }
-        
-        .stories {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 10px 0;
-        }
-        
-        .story {
-            width: 80px;
-            text-align: center;
-        }
-        
-        .story-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #405de6, #e1306c);
-            margin: 0 auto 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .security-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-            font-size: 12px;
-            color: #4CAF50;
-        }
-        
-        .rate-limit-message {
-            display: none;
-            background: rgba(255, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: shake 0.5s ease-in-out;
-        }
-        
-        .bot-detected-message {
-            display: none;
-            background: rgba(255, 165, 0, 0.8);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .captcha-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .captcha-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            color: #333;
-            max-width: 300px;
-            width: 90%;
-        }
-        
-        .captcha-title {
-            font-size: 20px;
+
+        .completion-time {
+            font-size: 1.4rem;
             font-weight: bold;
-            margin-bottom: 15px;
-            color: #405de6;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
-        
-        .captcha-success {
-            display: none;
-            background: rgba(76, 175, 80, 0.9);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin: 10px 0;
+
+        .instagram-brand {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: #ccc;
+            opacity: 0.8;
         }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        .security-stats {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 12px;
-        }
-        
-        .security-stats div {
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
-        }
-        
-        .g-recaptcha {
-            display: inline-block;
-            margin: 10px 0;
-        }
-        
-        .captcha-required {
-            border: 2px solid #ff6b6b !important;
+
+        .pulse {
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
-            0% { border-color: #ff6b6b; }
-            50% { border-color: #ff8e8e; }
-            100% { border-color: #ff6b6b; }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -432,170 +225,33 @@
     <div class="moon"></div>
 
     <!-- Bakım Ekranı -->
-    <div id="maintenanceScreen" class="maintenance-screen">
-        <div class="maintenance-content">
-            <div class="maintenance-clock" id="maintenanceClock">00:00:00</div>
-            <div class="maintenance-greeting" id="maintenanceGreeting">Günaydın!</div>
-            <div class="maintenance-title">🚧 Bakım Modu</div>
-            <div class="maintenance-message">
-                Sistem şu anda planlı bakım çalışması nedeniyle geçici olarak kullanıma kapalıdır.
-                Lütfen 30 dakika sonra tekrar deneyin.
-            </div>
-            
+    <div class="maintenance-container">
+        <div class="maintenance-clock" id="maintenanceClock">00:00:00</div>
+        <div class="maintenance-greeting" id="maintenanceGreeting">Günaydın!</div>
+        
+        <div class="maintenance-icon">🚧</div>
+        <div class="maintenance-title">Bakım Modu</div>
+        
+        <div class="maintenance-message">
+            Profilimiz şu anda planlı bakım çalışması nedeniyle geçici olarak kullanıma kapalıdır.
+            Sistemimizi daha iyi hizmet verebilmek için güncelliyoruz.
+        </div>
+        
+        <div class="countdown-container">
             <div class="countdown" id="countdown">30:00</div>
             
             <div class="progress-container">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
-            
-            <div class="maintenance-info">
-                <strong>⏰ Tahmini Tamamlanma:</strong><br>
-                <span id="completionTime">00:00</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- CAPTCHA Modal -->
-    <div id="captchaModal" class="captcha-modal">
-        <div class="captcha-content">
-            <div class="captcha-title">🤖 Güvenlik Doğrulaması</div>
-            <p>Lütfen bot olmadığınızı doğrulayın:</p>
-            
-            <!-- Google reCAPTCHA -->
-            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onCaptchaSuccess"></div>
-            
-            <div id="captchaSuccess" class="captcha-success">
-                ✅ Doğrulama başarılı! Yönlendiriliyorsunuz...
-            </div>
-            
-            <button onclick="closeCaptcha()" class="btn" style="margin-top: 15px;">Kapat</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Güvenlik Mesajları -->
-        <div id="rateLimitMessage" class="rate-limit-message">
-            <strong>🚫 DDoS Koruması Aktif!</strong><br>
-            Çok fazla istek algılandı. Lütfen 10 dakika bekleyin.
         </div>
         
-        <div id="botDetectedMessage" class="bot-detected-message">
-            <strong>🤖 Bot Tespit Edildi!</strong><br>
-            Şüpheli aktivite algılandı. Lütfen CAPTCHA doğrulaması yapın.
-            <button onclick="showCaptcha()" class="btn" style="margin-top: 10px;">CAPTCHA Doğrula</button>
-        </div>
-
-        <!-- Profil Kartı -->
-        <div class="profile-card">
-            <img src="https://via.placeholder.com/120" alt="Profil" class="profile-img">
-            <div class="username">@mrttsbb</div>
-            <div class="bio">🎯 Content Creator • 📸 Photography • 🚀 Digital Passion</div>
-            
-            <!-- İstatistikler -->
-            <div class="stats">
-                <div class="stat-item">
-                    <span class="stat-number">187</span>
-                    <span class="stat-label">Gönderi</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">1.2K</span>
-                    <span class="stat-label">Takipçi</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">356</span>
-                    <span class="stat-label">Takip</span>
-                </div>
-            </div>
-            
-            <!-- Güvenlik İstatistikleri -->
-            <div class="security-stats">
-                <div>
-                    <span>🛡️ DDoS Engellemeler:</span>
-                    <span id="ddosBlocks">0</span>
-                </div>
-                <div>
-                    <span>🤖 Bot Tespitleri:</span>
-                    <span id="botDetections">0</span>
-                </div>
-                <div>
-                    <span>✅ CAPTCHA Doğrulamalar:</span>
-                    <span id="captchaVerifications">0</span>
-                </div>
-                <div>
-                    <span>🌐 Aktif Koruma:</span>
-                    <span>✅ Açık</span>
-                </div>
-            </div>
-            
-            <!-- Butonlar -->
-            <button onclick="handleInstagramClick()" class="btn btn-instagram">📱 Instagram'da Takip Et</button>
-            <button onclick="handleMessageClick()" class="btn">📩 Mesaj Gönder</button>
-            
-            <!-- Bakım Butonu -->
-            <button onclick="startMaintenance()" class="btn" style="background: #ff6b6b; color: white; margin-top: 10px;">
-                🚧 Bakım Modunu Başlat (30dk)
-            </button>
-            
-            <!-- Güvenlik Rozeti -->
-            <div class="security-badge">
-                <span>🛡️</span>
-                <span>DDoS + Botnet + reCAPTCHA + Bakım Koruması Aktif</span>
-            </div>
+        <div class="maintenance-info">
+            <div class="info-title">⏰ Tahmini Tamamlanma Süresi</div>
+            <div class="completion-time" id="completionTime">00:00</div>
         </div>
         
-        <!-- Hikayeler -->
-        <div class="highlight">
-            <div class="highlight-title">Hikayeler</div>
-            <div class="stories">
-                <div class="story">
-                    <div class="story-circle">📸</div>
-                    <div>Foto</div>
-                </div>
-                <div class="story">
-                    <div class="story-circle">🎥</div>
-                    <div>Video</div>
-                </div>
-                <div class="story">
-                    <div class="story-circle">🌍</div>
-                    <div>Gezi</div>
-                </div>
-                <div class="story">
-                    <div class="story-circle">⚡</div>
-                    <div>Günlük</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Galeri -->
-        <div class="highlight">
-            <div class="highlight-title">Son Gönderiler</div>
-            <div class="gallery">
-                <div class="gallery-item">📷</div>
-                <div class="gallery-item">🌅</div>
-                <div class="gallery-item">🎭</div>
-                <div class="gallery-item">🚀</div>
-                <div class="gallery-item">💻</div>
-                <div class="gallery-item">⭐</div>
-            </div>
-        </div>
-        
-        <!-- Öne Çıkanlar -->
-        <div class="highlight">
-            <div class="highlight-title">Öne Çıkanlar</div>
-            <div class="stories">
-                <div class="story">
-                    <div class="story-circle">❤️</div>
-                    <div>Beğenilenler</div>
-                </div>
-                <div class="story">
-                    <div class="story-circle">🏆</div>
-                    <div>Başarılar</div>
-                </div>
-                <div class="story">
-                    <div class="story-circle">📚</div>
-                    <div>İlham</div>
-                </div>
-            </div>
+        <div class="instagram-brand">
+            Instagram • @mrttsbb
         </div>
     </div>
 
@@ -603,7 +259,7 @@
         // Yıldızları oluştur
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 150; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.width = Math.random() * 3 + 'px';
@@ -611,6 +267,7 @@
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
                 star.style.animationDelay = Math.random() * 5 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
                 starsContainer.appendChild(star);
             }
         }
@@ -644,7 +301,6 @@
 
         // Bakım modunu başlat
         function startMaintenance() {
-            const maintenanceScreen = document.getElementById('maintenanceScreen');
             const progressBar = document.getElementById('progressBar');
             const countdown = document.getElementById('countdown');
             const completionTime = document.getElementById('completionTime');
@@ -652,12 +308,6 @@
             // Bakım süresi 30 dakika
             const maintenanceDuration = 30 * 60 * 1000; // 30 dakika
             maintenanceEndTime = Date.now() + maintenanceDuration;
-            
-            // Arkaplanı gece moduna geçir
-            document.body.classList.add('maintenance-mode');
-            
-            // Bakım ekranını göster
-            maintenanceScreen.style.display = 'flex';
             
             // Tamamlanma saatini hesapla
             const endTime = new Date(maintenanceEndTime);
@@ -692,305 +342,33 @@
 
         // Bakım modunu bitir
         function endMaintenance() {
-            const maintenanceScreen = document.getElementById('maintenanceScreen');
-            
-            // Arkaplanı normal moda geçir
-            document.body.classList.remove('maintenance-mode');
-            
-            // Bakım ekranını gizle
-            maintenanceScreen.style.display = 'none';
-            
             // Timer'ı temizle
             if (maintenanceTimer) {
                 clearInterval(maintenanceTimer);
                 maintenanceTimer = null;
             }
             
-            alert('✅ Bakım çalışması tamamlandı! Sistem tekrar aktif.');
+            // Kullanıcıya bildirim göster (gerçek uygulamada yönlendirme yapılır)
+            alert('✅ Bakım çalışması tamamlandı! Profil tekrar aktif.');
+            
+            // Burada normal sayfaya yönlendirme yapılabilir
+            // window.location.href = 'normal-profil.html';
         }
 
-        // Gelişmiş DDoS, Botnet ve reCAPTCHA Koruması
-        class AdvancedSecurity {
-            constructor() {
-                this.requestLimit = 30;
-                this.timeWindow = 30000;
-                this.banDuration = 600000;
-                this.requestLog = new Map();
-                this.ddosBlocks = 0;
-                this.botDetections = 0;
-                this.captchaVerifications = 0;
-                this.isHumanVerified = false;
-                
-                this.botPatterns = [
-                    'headless', 'phantom', 'puppeteer', 'selenium',
-                    'python', 'curl', 'wget', 'bot', 'crawler',
-                    'scraper', 'spider', 'automation'
-                ];
-                
-                this.init();
-            }
-            
-            init() {
-                this.setupEventListeners();
-                this.startMonitoring();
-                this.updateStats();
-                this.checkInitialBehavior();
-            }
-            
-            getUserIdentifier() {
-                const fingerprint = [
-                    navigator.userAgent,
-                    navigator.language,
-                    screen.width + 'x' + screen.height,
-                    navigator.platform,
-                    new Date().getTimezoneOffset()
-                ].join('|');
-                
-                return btoa(fingerprint).substring(0, 16);
-            }
-            
-            detectBot() {
-                if (this.isHumanVerified) return false;
-                
-                const userAgent = navigator.userAgent.toLowerCase();
-                const isBot = this.botPatterns.some(pattern => 
-                    userAgent.includes(pattern)
-                );
-                
-                let mouseMoved = false;
-                document.addEventListener('mousemove', () => {
-                    mouseMoved = true;
-                }, { once: true });
-                
-                const hasHumanBehavior = mouseMoved || 
-                    document.hasFocus() || 
-                    navigator.userActivation.hasBeenActive;
-                
-                return isBot || !hasHumanBehavior;
-            }
-            
-            checkInitialBehavior() {
-                setTimeout(() => {
-                    if (this.detectBot() && !this.isHumanVerified) {
-                        this.botDetections++;
-                        this.showBotDetectedMessage();
-                        this.updateStats();
-                    }
-                }, 3000);
-            }
-            
-            checkRateLimit() {
-                if (this.isHumanVerified) return true;
-                
-                const userID = this.getUserIdentifier();
-                const now = Date.now();
-                
-                if (!this.requestLog.has(userID)) {
-                    this.requestLog.set(userID, {
-                        count: 1,
-                        firstRequest: now,
-                        bannedUntil: null,
-                        lastRequest: now
-                    });
-                    return true;
-                }
-                
-                const userData = this.requestLog.get(userID);
-                
-                if (userData.bannedUntil && now < userData.bannedUntil) {
-                    this.showRateLimitMessage(userData.bannedUntil - now);
-                    return false;
-                }
-                
-                if (userData.bannedUntil && now >= userData.bannedUntil) {
-                    userData.count = 1;
-                    userData.firstRequest = now;
-                    userData.bannedUntil = null;
-                    this.hideRateLimitMessage();
-                }
-                
-                if (this.detectBot()) {
-                    this.botDetections++;
-                    this.showBotDetectedMessage();
-                    userData.bannedUntil = now + this.banDuration;
-                    this.updateStats();
-                    return false;
-                }
-                
-                const timeSinceLastRequest = now - userData.lastRequest;
-                if (timeSinceLastRequest < 100) {
-                    userData.count += 5;
-                }
-                
-                if (now - userData.firstRequest > this.timeWindow) {
-                    userData.count = 1;
-                    userData.firstRequest = now;
-                } else {
-                    userData.count++;
-                    
-                    if (userData.count > this.requestLimit) {
-                        this.ddosBlocks++;
-                        userData.bannedUntil = now + this.banDuration;
-                        this.showRateLimitMessage(this.banDuration);
-                        this.updateStats();
-                        return false;
-                    }
-                }
-                
-                userData.lastRequest = now;
-                this.requestLog.set(userID, userData);
-                return true;
-            }
-            
-            verifyHuman() {
-                this.isHumanVerified = true;
-                this.captchaVerifications++;
-                this.updateStats();
-                this.hideBotDetectedMessage();
-                this.hideRateLimitMessage();
-                this.undimContent();
-                
-                document.querySelectorAll('.btn').forEach(btn => {
-                    btn.disabled = false;
-                    btn.classList.remove('captcha-required');
-                });
-            }
-            
-            showRateLimitMessage(remainingTime) {
-                const messageElement = document.getElementById('rateLimitMessage');
-                const minutes = Math.ceil(remainingTime / 60000);
-                messageElement.innerHTML = `
-                    <strong>🚫 DDoS Koruması Aktif!</strong><br>
-                    Çok fazla istek algılandı. Lütfen ${minutes} dakika bekleyin.
-                    ${!this.isHumanVerified ? '<br><button onclick="showCaptcha()" class="btn" style="margin-top: 10px;">CAPTCHA İle Doğrula</button>' : ''}
-                `;
-                messageElement.style.display = 'block';
-                this.dimContent();
-            }
-            
-            showBotDetectedMessage() {
-                const messageElement = document.getElementById('botDetectedMessage');
-                messageElement.style.display = 'block';
-                this.dimContent();
-                
-                document.querySelectorAll('.btn').forEach(btn => {
-                    btn.disabled = true;
-                    btn.classList.add('captcha-required');
-                });
-            }
-            
-            hideRateLimitMessage() {
-                const messageElement = document.getElementById('rateLimitMessage');
-                messageElement.style.display = 'none';
-            }
-            
-            hideBotDetectedMessage() {
-                const messageElement = document.getElementById('botDetectedMessage');
-                messageElement.style.display = 'none';
-            }
-            
-            dimContent() {
-                document.querySelector('.profile-card').style.opacity = '0.5';
-                document.querySelectorAll('.highlight').forEach(el => {
-                    el.style.opacity = '0.5';
-                });
-            }
-            
-            undimContent() {
-                document.querySelector('.profile-card').style.opacity = '1';
-                document.querySelectorAll('.highlight').forEach(el => {
-                    el.style.opacity = '1';
-                });
-            }
-            
-            updateStats() {
-                document.getElementById('ddosBlocks').textContent = this.ddosBlocks;
-                document.getElementById('botDetections').textContent = this.botDetections;
-                document.getElementById('captchaVerifications').textContent = this.captchaVerifications;
-            }
-            
-            setupEventListeners() {
-                document.addEventListener('click', (event) => {
-                    if (!this.isHumanVerified && !this.checkRateLimit()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                });
-                
-                document.addEventListener('keydown', (event) => {
-                    if (!this.isHumanVerified && !this.checkRateLimit()) {
-                        event.preventDefault();
-                    }
-                });
-            }
-            
-            startMonitoring() {
-                setInterval(() => {
-                    this.cleanup();
-                }, 60000);
-            }
-            
-            cleanup() {
-                const now = Date.now();
-                for (let [userID, userData] of this.requestLog.entries()) {
-                    if (now - userData.firstRequest > 3600000) {
-                        this.requestLog.delete(userID);
-                    }
-                }
-            }
-        }
-        
-        // Global fonksiyonlar
-        const securitySystem = new AdvancedSecurity();
-        
-        function showCaptcha() {
-            document.getElementById('captchaModal').style.display = 'flex';
-        }
-        
-        function closeCaptcha() {
-            document.getElementById('captchaModal').style.display = 'none';
-        }
-        
-        function onCaptchaSuccess(response) {
-            document.getElementById('captchaSuccess').style.display = 'block';
-            
-            setTimeout(() => {
-                securitySystem.verifyHuman();
-                closeCaptcha();
-                grecaptcha.reset();
-                document.getElementById('captchaSuccess').style.display = 'none';
-            }, 2000);
-        }
-        
-        function handleInstagramClick() {
-            if (securitySystem.isHumanVerified) {
-                window.open('https://instagram.com/mrttsbb', '_blank');
-            } else {
-                showCaptcha();
-            }
-        }
-        
-        function handleMessageClick() {
-            if (securitySystem.isHumanVerified) {
-                window.open('https://instagram.com/mrttsbb', '_blank');
-            } else {
-                showCaptcha();
-            }
-        }
-        
         // Sayfa yüklendiğinde
         window.addEventListener('load', function() {
             createStars();
             updateClockAndGreeting();
             setInterval(updateClockAndGreeting, 1000);
-            securitySystem.checkRateLimit();
+            startMaintenance(); // Sayfa açılınca otomatik başlat
         });
-        
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden) {
-                securitySystem.checkRateLimit();
+
+        // Sayfa kapatılırken timer'ı temizle
+        window.addEventListener('beforeunload', function() {
+            if (maintenanceTimer) {
+                clearInterval(maintenanceTimer);
             }
         });
     </script>
 </body>
-    </html>
+</html>
